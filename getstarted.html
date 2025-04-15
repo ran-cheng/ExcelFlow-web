@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExcelFlow - 像聊天一样操作Excel</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet" />
+  <style>
+    :where([class^="ri-"])::before {
+      content: "\f3c2";
+    }
+
+    .hero {
+      position: relative;
+      height: 712px;
+      background: url('./static/team.jpg') no-repeat center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .introduce {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      width: 80%;
+    }
+
+    .img-container {
+      width: 100%;
+      aspect-ratio: 16/9;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .img-container img {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    .img-container img.first {
+      left: 0;
+      transform: translateX(0%);
+    }
+
+    .img-container img.second {
+      left: 0;
+      transform: translateX(100%);
+    }
+
+    .img-container:hover img.first {
+      transform: translateX(-100%);
+    }
+
+    .img-container:hover img.second {
+      transform: translateX(0%);
+    }
+
+    .wx-qrcode {
+      position: absolute;
+      width: 5rem;
+      top: 100%;
+      left: 0;
+      transform: translateX(0%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .wechat:hover+.wx-qrcode {
+      opacity: 1;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#673AB7",
+            secondary: "#9C27B0",
+          },
+          borderRadius: {
+            none: "0px",
+            sm: "4px",
+            DEFAULT: "8px",
+            md: "12px",
+            lg: "16px",
+            xl: "20px",
+            "2xl": "24px",
+            "3xl": "32px",
+            full: "9999px",
+            button: "8px",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="bg-white min-h-screen">
+  <nav
+    class="fixed top-0 left-0 right-0 bg-white/85 backdrop-blur-md z-50 border-b border-gray-100 transition-all duration-300"
+    id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20 transition-all duration-300" id="navbarInner">
+        <a href="index.html">
+          <div class="flex items-center">
+            <img src="./static/logo.svg" alt="ExcelFlow Logo" class="h-12 mr-2 transition-all duration-300"
+              id="navLogo" />
+          </div>
+        </a>
+        <div class="flex items-center space-x-6">
+          <a href="getstarted.html" class="text-primary text-sm">快速开始</a>
+          <a href="help.html" class="text-gray-600 hover:text-primary  text-sm">帮助中心</a>
+          <a href="contact.html" class="text-gray-600 hover:text-primary text-sm">联系我们</a>
+          <a class="hidden sm:block" href="./resources/ExcelFlow-setup-v0.2.0.zip" onclick="count()">
+            <button
+              class="bg-primary text-white text-sm px-6 py-1 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+              免费下载
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero flex flex-col justify-center items-center">
+      <div class="mask"></div>
+      <div class="introduce">
+        <h1 class="text-6xl">简单直接</h1>
+        <p class="text-xl mt-4">只需几个简单步骤，即可开始使用ExcelFlow提高您的Excel工作效率</p>
+      </div>
+    </section>
+    <!-- ExcelFlow Menu Section -->
+    <section class="py-24 bg-white px-2">
+      <h2 class="text-3xl font-bold text-center">
+        化繁为简
+      </h2>
+      <h3 class="text-xl text-gray-500 text-center mt-4 mb-16 mx-2">
+        通过对话即可完成Excel操作，无需记忆繁杂的公式和按钮
+      </h3>
+      <div class="max-w-3xl mx-auto overflow-hidden rounded-md"
+        style="border: 2px solid #C2AAEE;box-shadow: 0 0 20px 10px rgba(103, 58, 183, 0.06);">
+        <img src="./static/menu.jpg" />
+      </div>
+    </section>
+    <!-- API Section -->
+    <section class="py-12 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <img src="./static/api.png" class="mx-auto mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <img src="./static/api.gif" />
+          <div class="flex flex-col items-start gap-2">
+            <div class="text-3xl">接入AI大模型API</div>
+            <div class="text-lg text-gray-500">在开始之前，请完成API的设置，这是与AI大模型建立连接的必要步骤</div>
+            <div class="flex flex-col gap-2 mt-4">
+              <div class="flex gap-2">
+                <i class="ri-arrow-right-double-line text-primary"></i>
+                <div class="text-gray-700">
+                  推荐您使用DeepSeek-V3模型，您可以到<a target="_blank" href="https://platform.deepseek.com"
+                    class="text-primary hover:underline">官方API开发平台</a>注册并申请API Key。
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <i class="ri-arrow-right-double-line text-primary"></i>
+                <div class="text-gray-700">
+                  或者使用SiliconFlow提供的AI服务，并选择DeepSeek-V3模型。现在扫码或访问
+                  <a href="https://cloud.siliconflow.cn/i/WcyopVBZ" target="_blank"
+                    class="text-primary hover:underline">https://cloud.siliconflow.cn</a>
+                  官方网站注册账号，即可免费获得2000万token，大约相当于20部《西游记》文本的处理量。
+                  <div class="w-20 mt-2">
+                    <img src="./static/sf_invate.png" />
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <i class="ri-arrow-right-double-line text-primary"></i>
+                <div class="text-gray-700">
+                  您也可以使用OpenAI的gpt-4模型，请注意要使用其Chat API URL来设置：
+                  https://api.openai.com/v1/<b>chat/completions</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-24 text-center">
+          <i class="ri-arrow-right-s-fill text-primary"></i><a class="text-sm text-primary hover:underline mr-2"
+            href="help.html">API Key申请指南</a>
+          <i class="ri-arrow-right-s-fill text-primary mb-2"></i><a class="text-sm text-primary hover:underline"
+            href="troubleshooting.html#vba-macro">进行正确的宏设置</a>
+        </div>
+      </div>
+    </section>
+    <!-- Chat Section -->
+    <section class="pt-12 pb-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <img src="./static/chat.png" class="mx-auto mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr,2fr] gap-24 items-center">
+          <div class="flex flex-col items-start gap-2">
+            <div class="text-3xl">对话</div>
+            <div class="flex flex-col gap-2 mt-4">
+              <div class="flex gap-2">
+                <i class="ri-arrow-right-double-line text-primary"></i>
+                <div class="text-gray-700">
+                  您可以通过对话窗口提出Excel操作需求，ExcelFlow会自动对任务进行拆解，并为您生成详细的执行方案。
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <i class="ri-arrow-right-double-line text-primary"></i>
+                <div class="text-gray-700">
+                  为了让AI大模型更好地理解您的需求，建议您为Excel文件和其中的每个Sheet进行合理命名，并在每个Sheet的首行设置合适的表头。
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <i class="ri-arrow-right-double-line text-primary"></i>
+                <div class="text-gray-700">
+                  在ExcelFlow执行任务后，需要您对执行结果进行审核。如果您接受执行结果，还可以将任务保存至工作流知识库中。
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="img-container rounded-md border-8 border-white">
+            <img class="first rounded-md" src="./static/chat1.jpg" />
+            <img class="second rounded-md" src="./static/chat2.jpg" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Workflow Section -->
+    <section class="pt-12 pb-24 bg-gradient-to-br from-primary/5 to-transparent">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <img src="./static/workflow.png" class="mx-auto mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <img src="./static/workflow.jpg" class="rounded-md"
+            style="box-shadow: 0 0 16px 6px rgba(0, 0, 0, 0.1); border: 1px solid #C2AAEE;" />
+
+          <div class="flex flex-col items-start gap-2">
+            <div class="text-3xl">工作流</div>
+            <div class="flex flex-col gap-2 mt-4">
+              <div class="flex gap-2">
+                <i class="ri-arrow-right-double-line text-primary"></i>
+                <div class="text-gray-700">
+                  您可以在新的Excel文件中，选择单步执行一个任务或一键执行整个工作流。
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <i class="ri-arrow-right-double-line text-primary"></i>
+                <div class="text-gray-700">
+                  如果您有周期性的重复任务，比如需要周度、月度整理类似结构的数据，您可以使用前期创建的工作流。这将有效节省您的时间和精力。
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <i class="ri-arrow-right-double-line text-primary"></i>
+                <div class="text-gray-700">
+                  您还可以管理工作流及工作流内的各项任务。
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+  </main>
+  <footer class="bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <a href="index.html">
+            <div class="flex items-center">
+              <img src="./static/logo_text.svg" alt="ExcelFlow Logo" class="h-6 mr-2" />
+            </div>
+            <p class="mt-4 text-gray-600">像聊天一样操作Excel</p>
+          </a>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-4">产品</h3>
+          <ul class="space-y-2 text-gray-600">
+            <li><a href="index.html#samples" class="hover:text-primary">功能介绍</a></li>
+            <li><a href="index.html#faq" class="hover:text-primary">常见问题</a></li>
+            <li><a href="contact.html" class="hover:text-primary">技术支持</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-4">资源</h3>
+          <ul class="space-y-2 text-gray-600">
+            <li><a href="help.html" class="hover:text-primary">帮助文档</a></li>
+            <li><a href="https://space.bilibili.com/605028554" class="hover:text-primary">场景演示视频</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-4">关注我们</h3>
+          <div class="text-xs text-gray-400">我们是由AI工程师与电子表格资深开发者组成的跨界组合，我们经历过无数个被复杂公式困扰的深夜，如今将AI技术转化为可感知的生产力 —
+            让每个单元格都听得懂"人话"。</div>
+          <div class="mt-4 relative">
+            <a href="####" title="微信扫码" class="wechat text-gray-400 hover:text-primary">
+              <i class="ri-wechat-line ri-xl"></i>
+            </a>
+            <img class="wx-qrcode" src="./static/wx-excelflow.png" />
+            <a href="https://space.bilibili.com/605028554" title="B站" target="_blank"
+              class="text-gray-400 hover:text-primary">
+              <i class="ri-bilibili-line ri-xl"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-24 pt-8 border-t border-gray-200 text-center text-gray-400 text-xs">
+        <p>© 2024-2025 HYF Tech. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar shadow and height change on scroll
+    window.addEventListener("scroll", function () {
+      const navbar = document.getElementById("navbar");
+      const navbarInner = document.getElementById("navbarInner");
+      const navLogo = document.getElementById("navLogo");
+      if (window.scrollY > 10) {
+        navLogo.src = "./static/logo_simple.svg";
+
+        navbar.classList.add("shadow-md");
+        navbarInner.classList.remove("h-20");
+        navbarInner.classList.add("h-12");
+        navLogo.classList.remove("h-12");
+        navLogo.classList.add("h-8");
+      } else {
+        navLogo.src = "./static/logo.svg";
+
+        navbar.classList.remove("shadow-md");
+        navbarInner.classList.remove("h-12");
+        navbarInner.classList.add("h-20");
+        navLogo.classList.remove("h-8");
+        navLogo.classList.add("h-12");
+      }
+    });
+
+  </script>
+
+  <script src="./static/assets/count.js"></script>
+</body>
+
+</html>
