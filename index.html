@@ -86,6 +86,15 @@
     };
   </script>
 </head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-56SB3L9XBH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-56SB3L9XBH');
+</script>
 
 <body class="bg-white min-h-screen">
   <nav
@@ -101,7 +110,7 @@
           <a href="getstarted.html" class="text-gray-600 hover:text-primary text-sm">快速开始</a>
           <a href="help.html" class="text-gray-600 hover:text-primary  text-sm">帮助中心</a>
           <a href="contact.html" class="text-gray-600 hover:text-primary text-sm">联系我们</a>
-          <a class="hidden sm:block" href="./resources/ExcelFlow-setup-v0.2.0.zip" onclick="count()">
+          <a class="hidden sm:block" href="download.html">
             <button
               class="bg-primary text-white text-sm px-4 py-1 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
               免费下载
@@ -125,7 +134,7 @@
               您的操作还可以被保存，并形成工作流，后续有类似的操作时可一键执行工作流。
             </p>
             <div class="flex gap-4 flex-wrap">
-              <a href="./resources/ExcelFlow-setup-v0.2.0.zip" onclick="count()">
+              <a href="download.html">
                 <button
                   class="bg-primary text-white px-8 py-3 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap text-lg cursor-pointer">
                   <i class="ri-microsoft-fill mr-2"></i>立即免费下载
@@ -634,7 +643,7 @@
                 <span>数据分析与可视化</span>
               </li>
             </ul>
-            <a href="./resources/ExcelFlow-setup-v0.2.0.zip" onclick="count()">
+            <a href="download.html">
               <button
                 class="w-full bg-primary text-white px-6 py-3 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap text-lg cursor-pointer">
                 免费下载
@@ -866,7 +875,7 @@
       `
     );
   </script>
-  <script src="./static/assets/count.js"></script>
+
 </body>
 
 </html>
